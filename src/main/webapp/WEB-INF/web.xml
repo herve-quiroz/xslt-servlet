@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+  <display-name>XSLT Servlet</display-name>
+  <description>Simple Web application to run XSLT stylesheets through a REST API</description>
+
+  <servlet>
+    <servlet-name>test</servlet-name>
+    <servlet-class>org.trancecode.web.XsltServlet</servlet-class>
+    <init-param>
+      <param-name>stylesheet-uri</param-name>
+      <param-value>/org/trancecode/web/test/stylesheet.xsl</param-value>
+    </init-param>
+    <init-param>
+      <param-name>source-uri</param-name>
+      <param-value>/org/trancecode/web/test/stylesheet.xsl</param-value>
+    </init-param>
+    <init-param>
+      <param-name>logging-level</param-name>
+      <param-value>TRACE</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>test</servlet-name>
+    <url-pattern>/test/*</url-pattern>
+  </servlet-mapping>
+
+</web-app>
