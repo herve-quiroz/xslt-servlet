@@ -78,11 +78,11 @@
   <distributionManagement>
     <repository>
       <id>trancecode.org</id>
-      <url>scpexe://maven@maven.trancecode.org/home/maven/repository</url>
+      <url>scpexe://maven@maven.trancecode.org/home/maven/repository/releases</url>
     </repository>
     <snapshotRepository>
       <id>trancecode.org</id>
-      <url>scpexe://maven@maven.trancecode.org/home/maven/repository</url>
+      <url>scpexe://maven@maven.trancecode.org/home/maven/repository/snapshots</url>
       <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>
   </distributionManagement>
