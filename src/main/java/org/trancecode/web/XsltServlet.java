@@ -112,6 +112,7 @@ public class XsltServlet extends HttpServlet
             {
                 parameters.put(property.getKey().toString(), property.getValue().toString());
             }
+            parameters.put("hostname", request.getServerName());
             for (final Enumeration<?> e = request.getParameterNames(); e.hasMoreElements();)
             {
                 final String parameterName = e.nextElement().toString();
