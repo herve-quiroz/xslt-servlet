@@ -84,8 +84,9 @@ public class XsltServlet extends HttpServlet
     private URI getUri(final HttpServletRequest request, final String parameterName)
     {
         final String path = getInitParameter(parameterName);
+        Preconditions.checkArgument(path != null, "missing mandatory servlet parameter: %s", parameterName);
         final URL url = XsltServlet.class.getResource(path);
-        Preconditions.checkArgument(url != null, "missing mandatory servlet parameter: %s", parameterName);
+        Preconditions.checkArgument(url != null, "resource not found: %s", path);
         try
         {
             return url.toURI();
