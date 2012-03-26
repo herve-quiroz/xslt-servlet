@@ -33,12 +33,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Source;
+import javax.xml.transform.SourceLocator;
 import javax.xml.transform.TransformerException;
 
+import net.sf.saxon.expr.instruct.TerminationException;
+import net.sf.saxon.s9api.MessageListener;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmAtomicValue;
+import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
@@ -139,11 +144,13 @@ public class XsltServlet extends HttpServlet
 
         final Processor processor = new Processor(false);
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
+        final StringBuilder errorMessage = new StringBuilder();
         xsltCompiler.setErrorListener(new ErrorListener()
         {
             @Override
             public void warning(final TransformerException exception) throws TransformerException
             {
+                errorMessage.append(exception.getMessageAndLocation());
                 LOG.warn("{}", exception.getMessageAndLocation());
                 throw exception;
             }
@@ -151,6 +158,7 @@ public class XsltServlet extends HttpServlet
             @Override
             public void fatalError(final TransformerException exception) throws TransformerException
             {
+                errorMessage.append(exception.getMessageAndLocation());
                 LOG.error("{}", exception.getMessageAndLocation());
                 throw exception;
             }
@@ -158,12 +166,21 @@ public class XsltServlet extends HttpServlet
             @Override
             public void error(final TransformerException exception) throws TransformerException
             {
+                errorMessage.append(exception.getMessageAndLocation());
                 LOG.fatal("{}", exception.getMessageAndLocation());
                 throw exception;
             }
         });
         final Source stylesheetSource = xsltCompiler.getURIResolver().resolve(stylesheetUri.toString(), "");
-        final XsltExecutable xsltExecutable = xsltCompiler.compile(stylesheetSource);
+        final XsltExecutable xsltExecutable;
+        try
+        {
+            xsltExecutable = xsltCompiler.compile(stylesheetSource);
+        }
+        catch (final SaxonApiException e)
+        {
+            throw new IllegalStateException(errorMessage.toString(), e);
+        }
         final XsltTransformer xsltTransformer = xsltExecutable.load();
         for (final Map.Entry<?, ?> parameter : parameters.entrySet())
         {
@@ -175,8 +192,32 @@ public class XsltServlet extends HttpServlet
 
         final Serializer serializer = new Serializer();
         serializer.setOutputStream(out);
+        xsltTransformer.setMessageListener(new MessageListener()
+        {
+            @Override
+            public void message(final XdmNode content, final boolean terminate, final SourceLocator locator)
+            {
+                LOG.debug("{}", content);
+                if (terminate)
+                {
+                    errorMessage.append(content);
+                }
+            }
+        });
         xsltTransformer.setSource(xsltCompiler.getURIResolver().resolve(sourceUri.toString(), ""));
         xsltTransformer.setDestination(serializer);
-        xsltTransformer.transform();
+        try
+        {
+            xsltTransformer.transform();
+        }
+        catch (final SaxonApiException e)
+        {
+            if (e.getCause() != null && e.getCause() instanceof TerminationException)
+            {
+                throw new IllegalStateException(errorMessage.toString(), e);
+            }
+
+            throw e;
+        }
     }
 }
