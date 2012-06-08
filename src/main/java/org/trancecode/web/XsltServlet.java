@@ -127,7 +127,7 @@ public class XsltServlet extends HttpServlet
                     parameters.put(parameterName, request.getParameter(parameterName));
                 }
             }
-            parameters.put("context-url", request.getServletPath() + request.getContextPath());
+            parameters.put("request.path", request.getPathInfo());
             response.setContentType("text/html");
             transform(stylesheetUri, sourceUri, parameters, response.getOutputStream());
         }
