@@ -57,9 +57,10 @@ import org.trancecode.logging.Logger;
  */
 public class XsltServlet extends HttpServlet
 {
+    private static final String PROPERTY_LOGGING_LEVEL = "logging.level";
+
     public static final String PARAMETER_STYLESHEET_URI = "stylesheet-uri";
     public static final String PARAMETER_SOURCE_URI = "source-uri";
-    public static final String PARAMETER_LOGGING_LEVEL = "logging-level";
 
     private static final long serialVersionUID = -4348501590456699777L;
     private static Logger LOG = Logger.getLogger(XsltServlet.class);
@@ -70,7 +71,7 @@ public class XsltServlet extends HttpServlet
         org.apache.log4j.Logger.getRootLogger().removeAllAppenders();
         org.apache.log4j.Logger.getRootLogger().addAppender(
                 new ConsoleAppender(new PatternLayout("%-5p %30.30c{2} %m%n")));
-        final String levelName = getInitParameter(PARAMETER_LOGGING_LEVEL);
+        final String levelName = System.getProperty(PROPERTY_LOGGING_LEVEL);
         final Level level;
         if (levelName == null)
         {
