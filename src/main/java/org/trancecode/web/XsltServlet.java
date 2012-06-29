@@ -17,6 +17,7 @@ package org.trancecode.web;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import com.google.common.io.ByteStreams;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -110,6 +111,13 @@ public class XsltServlet extends HttpServlet
         LOG.trace("{@method} request = {}", request);
         try
         {
+            if ("/favicon.ico".equals(request.getRequestURI()))
+            {
+                final URL iconUrl = getClass().getResource("/favicon.ico");
+                ByteStreams.copy(iconUrl.openStream(), response.getOutputStream());
+                return;
+            }
+
             final URI stylesheetUri = getUri(request, PARAMETER_STYLESHEET_URI);
             LOG.trace("  stylesheetUri = {}", stylesheetUri);
             final URI sourceUri = getUri(request, PARAMETER_SOURCE_URI);

@@ -31,8 +31,6 @@ https://github.com/componize/redmine-scrum-board
 
 == TODO
 
-- Handle `/favicon.ico`
-
 // vim: set syntax=asciidoc:
 // vim: set spell:
 // vim: set spelllang=en:
