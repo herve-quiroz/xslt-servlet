@@ -26,9 +26,15 @@ import org.eclipse.jetty.servlet.ServletHolder;
  */
 public final class Launcher
 {
+    private static final int DEFAULT_HTTP_PORT = 8080;
+    private static final String ENV_HTTP_PORT = "PORT";
+    private static final String PROPERTY_HTTP_PORT = "http.port";
+
     public static void main(final String[] args) throws Exception
     {
-        final Server server = new Server(Integer.valueOf(System.getenv("PORT")));
+        final String portString = System.getProperty(PROPERTY_HTTP_PORT, System.getenv(ENV_HTTP_PORT));
+        final int port = portString != null ? Integer.valueOf(portString) : DEFAULT_HTTP_PORT;
+        final Server server = new Server(Integer.valueOf(port));
         final ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
         server.setHandler(context);
