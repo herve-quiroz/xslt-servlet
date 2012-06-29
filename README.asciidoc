@@ -1,0 +1,38 @@
+
+A REST endpoint that produces content running XSLT 2.0 stylesheets.
+
+== Build
+
+----
+$ mvn clean install
+----
+
+== Run
+
+----
+$ java -jar target/xslt-servlet-*-launcher.jar
+----
+
+You can define the following properties through the usual `-Dname=value`
+arguments:
+
+- `http.port`: port number for the inbound HTTP connections. Default value is
+  `8080`.
+- `logging.level`: the logger level. Allowed values are `TRACE`,
+  `DEBUG`, `INFO`, `WARN`, `ERROR` and `FATAL`. Default value is `INFO`.
+
+NOTE: To allow the execution of the launcher as an http://heroku.com/[Heroku]
+application, the `PORT` environment variable can be used for the HTTP port
+number.
+
+== Example applications
+
+https://github.com/componize/redmine-scrum-board
+
+== TODO
+
+- Handle `/favicon.ico`
+
+// vim: set syntax=asciidoc:
+// vim: set spell:
+// vim: set spelllang=en:
