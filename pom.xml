@@ -39,7 +39,7 @@
   </ciManagement>
 
   <scm>
-    <connection>git://github.com/herve-quiroz/xslt-servlet.git</connection>
+    <connection>scm:git:git://github.com/herve-quiroz/xslt-servlet.git</connection>
     <developerConnection>scm:git:file://${basedir}</developerConnection>
     <url>https://github.com/herve-quiroz/xslt-srevlet</url>
   </scm>
