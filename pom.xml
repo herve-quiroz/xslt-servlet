@@ -26,6 +26,24 @@
     <url>http://www.trancecode.org</url>
   </organization>
 
+  <licenses>
+    <license>
+      <name>Apache 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <ciManagement>
+    <system>Hudson</system>
+    <url>http://ci.trancecode.org/job/xslt-servlet</url>
+  </ciManagement>
+
+  <scm>
+    <connection>git://github.com/herve-quiroz/xslt-servlet.git</connection>
+    <developerConnection>scm:git:file://${basedir}</developerConnection>
+    <url>https://github.com/herve-quiroz/xslt-srevlet</url>
+  </scm>
+
   <!-- ===================================================================== -->
 
   <developers>
